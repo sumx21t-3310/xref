@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Pages/HomePage.dart';
+import 'package:xref/Pages/CanvasPage.dart';
 
 void main() => runApp(const App());
 
@@ -9,11 +9,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      home: HomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: 'xref',
+        debugShowCheckedModeBanner: true,
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepPurple, brightness: Brightness.dark),
+            useMaterial3: true),
+        home: const CanvasPage());
   }
 }
