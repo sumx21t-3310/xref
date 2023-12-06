@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GridBackground extends StatelessWidget {
-  GridBackground({super.key, required this.gridSize, double? border});
+  GridBackground(
+      {super.key, required this.gridSize, required this.borderWidth});
 
   double gridSize;
   double borderWidth;
@@ -34,7 +35,7 @@ class GridBackground extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: lineColor, // 線の色
-                      width: 0.5, // 線の太さ
+                      width: borderWidth, // 線の太さ
                     ),
                   ),
                 );
