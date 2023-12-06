@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
 
-class Clip extends StatefulWidget {
-  Clip({super.key, required this.provider});
+class ScrapImage extends StatefulWidget {
+  ScrapImage({super.key, required this.provider});
 
   ImageProvider provider;
 
   @override
-  State<Clip> createState() => _ClipState();
+  State<ScrapImage> createState() => _ScrapImageState();
 }
 
-class _ClipState extends State<Clip> {
+class _ScrapImageState extends State<ScrapImage> {
   late Rect rect;
 
   @override
@@ -57,5 +57,6 @@ class _ClipState extends State<Clip> {
       );
 
   @override
-  Widget build(BuildContext context) => _createImage(widget.provider);
+  Widget build(BuildContext context) =>
+      _createImage(widget.provider, Colors.blue, 2);
 }

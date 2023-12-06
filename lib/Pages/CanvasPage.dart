@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_box_transform/flutter_box_transform.dart';
+import 'package:xref/Components/ScrapImage.dart';
 
 class CanvasPage extends StatefulWidget {
   const CanvasPage({super.key});
@@ -9,62 +9,38 @@ class CanvasPage extends StatefulWidget {
 }
 
 class _CanvasPageState extends State<CanvasPage> {
-  bool cropping = false;
+  var scraps = <Widget>[];
 
-  late Rect rect = Rect.fromCenter(
-    center: MediaQuery.of(context).size.center(Offset.zero),
-    width: 400,
-    height: 400,
-  );
+  void addScrap() {
+    scraps.add(
+        ScrapImage(provider: NetworkImage("https://placehold.jp/200x200.png")));
+  }
 
-  late Rect cropRect = cropRect;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        tooltip: cropping ? 'Disable Cropping ' : 'Enable Cropping',
-        onPressed: () {
-          setState(() {
-            cropping = !cropping;
-            cropRect = rect;
-          });
-        },
-        child: Icon(cropping ? Icons.crop : Icons.crop_free),
-      ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          TransformableBox(
-            key: const ValueKey('Main TransformableBox'),
-            rect: rect,
-            onChanged: (result, event) {
-              setState(() {
-                rect = result.rect;
-              });
-            },
-            contentBuilder: (BuildContext context, Rect rect, Flip flip) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue, width: 2),
-                  image: const DecorationImage(
-                    image: AssetImage('images/image.png'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              );
-            },
-            visibleHandles: {...HandlePosition.corners},
-            resizeModeResolver: () => ResizeMode.scale,
-            cornerHandleBuilder: (context, handle) => DefaultCornerHandle(
-              handle: handle,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.blue, width: 2)),
-            ),
-          ),
-        ],
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() => addScrap());
+          },
+          child: const Icon(Icons.add),
+        ),
+        body: Stack(
+          children: [
+            // gridBackGround(10),
+            InteractiveViewer(
+              boundaryMargin: const EdgeInsets.all(double.infinity),
+              minScale: 0.1,
+              maxScale: 1.6,
+              child: Stack(
+                clipBehavior: Clip.none,
+                fit: StackFit.expand,
+                children: scraps,
+              ),
+            )
+          ],
+        ));
   }
 }
