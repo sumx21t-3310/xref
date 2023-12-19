@@ -11,15 +11,21 @@ class ScrapImage extends StatefulWidget {
 }
 
 class _ScrapImageState extends State<ScrapImage> {
-  late Rect rect;
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    rect = _getRectTo(widget.provider);
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() => isFocus = _focusNode.hasFocus);
   }
 
-  Rect _getRectTo(ImageProvider provider) {
+  var isFocus = false;
+
+  final FocusNode _focusNode = FocusNode();
+  late Rect rect = _getRectFrom(widget.provider);
+
+  Rect _getRectFrom(ImageProvider provider) {
+
+
+
     return Rect.fromCenter(
       center: MediaQuery.of(context).size.center(Offset.zero),
       width: 400,
@@ -32,28 +38,19 @@ class _ScrapImageState extends State<ScrapImage> {
       TransformableBox(
         key: const ValueKey('Clip'),
         rect: rect,
-        onChanged: (result, event) {
-          setState(() => rect = result.rect);
-        },
-        contentBuilder: (BuildContext context, Rect rect, Flip flip) {
-          return DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(color: borderColor, width: 2),
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: provider,
-              ),
+        onChanged: (result, event) => setState(() => rect = result.rect),
+        contentBuilder: (BuildContext context, Rect rect, Flip flip) =>
+            DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: borderColor, width: 2),
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: provider,
             ),
-          );
-        },
+          ),
+        ),
         visibleHandles: const {...HandlePosition.corners},
         resizeModeResolver: () => ResizeMode.scale,
-        cornerHandleBuilder: (context, handle) => DefaultCornerHandle(
-          handle: handle,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.blue, width: 2)),
-        ),
       );
 
   @override

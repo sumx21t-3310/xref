@@ -27,14 +27,10 @@ class GridBackground extends StatelessWidget {
               ),
               itemCount: numColumns * numRows,
               itemBuilder: (BuildContext context, int index) {
-                var lineColor = Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white.withOpacity(0.3)
-                    : Colors.black.withOpacity(0.3);
-
                 return Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: lineColor, // 線の色
+                      color: Colors.black12, // 線の色
                       width: borderWidth, // 線の太さ
                     ),
                   ),

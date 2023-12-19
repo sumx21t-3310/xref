@@ -11,10 +11,16 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: 'xref',
         debugShowCheckedModeBanner: true,
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.deepPurple, brightness: Brightness.dark),
-            useMaterial3: true),
+        theme: AppThemeData.create(Brightness.light),
+        darkTheme: AppThemeData.create(Brightness.dark),
         home: const CanvasPage());
   }
+}
+
+class AppThemeData {
+  static ThemeData create(Brightness brightness) => ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.blue,
+          brightness: brightness));
 }
