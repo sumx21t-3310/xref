@@ -38,6 +38,7 @@ dependencies:
   image_size_getter: ^2.1.2
   flutter_hooks: ^0.20.3
   undo: ^1.5.0
+  flutter_speed_dial: ^7.0.0
 
 dev_dependencies:
   flutter_test:
