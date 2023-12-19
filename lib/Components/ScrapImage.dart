@@ -23,9 +23,6 @@ class _ScrapImageState extends State<ScrapImage> {
   late Rect rect = _getRectFrom(widget.provider);
 
   Rect _getRectFrom(ImageProvider provider) {
-
-
-
     return Rect.fromCenter(
       center: MediaQuery.of(context).size.center(Offset.zero),
       width: 400,
