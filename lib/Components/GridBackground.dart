@@ -9,13 +9,6 @@ class GridBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.transparent, Colors.transparent],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final int numColumns = (constraints.maxWidth / gridSize).ceil();

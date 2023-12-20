@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:undo/undo.dart';
 import 'package:xref/Components/ScrapImage.dart';
 import 'package:xref/Components/GridBackground.dart';
@@ -15,52 +17,107 @@ class _CanvasPageState extends State<CanvasPage> {
   var history = ChangeStack(limit: 50);
   var scraps = <Widget>[];
 
-  void addScrap() {
-    var provider = NetworkImage("https://placehold.jp/200x200.png");
+  Future _addScrapFromGallery() async {
+    var picker = ImagePicker();
+    picker.pickImage(source: ImageSource.gallery);
+  }
 
-    history.add(Change(
+  void _addScrapFromURL(String url) {
+    var image = NetworkImage(url);
+    _addScrap(image);
+  }
+
+  void _addScrap(ImageProvider image) {
+    history.add(
+      Change(
         [...scraps],
-        () => setState(() => scraps.add(ScrapImage(provider: provider))),
-        (oldValue) => setState(() => scraps = [...oldValue])));
+        () => setState(() => scraps.add(ScrapImage(provider: image))),
+        (oldValue) => setState(() => scraps = [...oldValue]),
+      ),
+    );
+  }
+
+  SpeedDial speedDial() {
+    var options = <SpeedDialChild>[
+      SpeedDialChild(
+        label: "Add Image: Photo Gallery",
+        onTap: _addScrapFromGallery,
+      ),
+      SpeedDialChild(
+        label: "Add Image: URL",
+        onTap: () =>
+            showDialog(context: context, builder: (context) => urlDialog()),
+      ),
+      SpeedDialChild(
+        label: "Add Images: Pinterest boards",
+        onTap: null,
+      ),
+      SpeedDialChild(
+        label: "AddImage: Take Photo",
+        onTap: null,
+      )
+    ];
+
+    return SpeedDial(
+      children: options,
+      tooltip: "Add Image",
+      child: const Icon(Icons.add_photo_alternate),
+    );
+  }
+
+  AppBar appBar() {
+    return AppBar(
+      actions: [
+        IconButton(
+            tooltip: "undo",
+            onPressed: history.canUndo ? history.undo : null,
+            icon: const Icon(Icons.undo)),
+        IconButton(
+            tooltip: "redo",
+            onPressed: history.canRedo ? history.redo : null,
+            icon: const Icon(Icons.redo)),
+      ],
+    );
+  }
+
+  AlertDialog urlDialog() {
+    return const AlertDialog(
+      title: Text("Input URL(https://~)"),
+      actions: [
+        TextButton(onPressed: null, child: Text("OK")),
+        TextButton(onPressed: null, child: Text("Cancel")),
+      ],
+    );
+  }
+
+  Widget body() {
+    return Stack(
+      children: [
+        if (visibleGrid)
+          GridBackground(
+            borderWidth: 1,
+            gridSize: 25,
+          ),
+        InteractiveViewer(
+          boundaryMargin: const EdgeInsets.all(double.infinity),
+          minScale: 0.1,
+          maxScale: 1.6,
+          child: Stack(
+            clipBehavior: Clip.none,
+            fit: StackFit.expand,
+            children: scraps,
+          ),
+        )
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () => history.undo(),
-                color: history.canUndo ? Colors.blueAccent : Colors.black12,
-                icon: const Icon(Icons.undo)),
-            IconButton(
-                onPressed: () => history.redo(),
-                color: history.canRedo ? Colors.blueAccent : Colors.black12,
-                icon: const Icon(Icons.redo)),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => addScrap(),
-          child: const Icon(Icons.add),
-        ),
-        body: (Stack(
-          children: [
-            if (visibleGrid)
-              GridBackground(
-                borderWidth: 1,
-                gridSize: 25,
-              ),
-            InteractiveViewer(
-              boundaryMargin: const EdgeInsets.all(double.infinity),
-              minScale: 0.1,
-              maxScale: 1.6,
-              child: Stack(
-                clipBehavior: Clip.none,
-                fit: StackFit.expand,
-                children: scraps,
-              ),
-            )
-          ],
-        )));
+      appBar: appBar(),
+      floatingActionButton: speedDial(),
+      body: body(),
+    );
   }
 }
