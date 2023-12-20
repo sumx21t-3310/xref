@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +20,11 @@ class _CanvasPageState extends State<CanvasPage> {
 
   Future _addScrapFromGallery() async {
     var picker = ImagePicker();
-    picker.pickImage(source: ImageSource.gallery);
+    var xFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (xFile == null) return;
+    var image = FileImage(File(xFile.path));
+    _addScrap(image);
   }
 
   void _addScrapFromURL(String url) {
