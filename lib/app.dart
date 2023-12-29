@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Pages/CanvasPage.dart';
+import 'package:xref/pages/start_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -7,18 +7,20 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'xref',
-        debugShowCheckedModeBanner: true,
-        theme: AppThemeData.create(Brightness.light),
-        darkTheme: AppThemeData.create(Brightness.dark),
-        home: const CanvasPage());
+      debugShowCheckedModeBanner: false,
+      theme: createTheme(Brightness.light),
+      darkTheme: createTheme(Brightness.dark),
+      home: const StartPage(),
+    );
   }
 }
 
-class AppThemeData {
-  static ThemeData create(Brightness brightness) => ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.grey,
-          brightness: brightness));
+ThemeData createTheme(Brightness brightness) {
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSwatch(
+      primarySwatch: Colors.grey,
+      brightness: brightness,
+    ),
+  );
 }
