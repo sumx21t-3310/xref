@@ -28,18 +28,18 @@ class _CanvasPageState extends State<CanvasPage> {
   var images = <File>[];
 
   Future _addScrapFromGallery() async {
-    var picker = ImagePicker();
-    var xFile = await picker.pickImage(source: ImageSource.gallery);
+    final picker = ImagePicker();
+    final xFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (xFile == null) return;
-    var image = FileImage(File(xFile.path));
+    final image = FileImage(File(xFile.path));
     _addScrap(image);
   }
 
+  void _addScrapFromClipBoard() {}
+
   Future<void> _addScrapFromURL() async {
     url = (await showURLDialog(context, "")) ?? "";
-
-    print("url: $url");
 
     if (url.isEmpty) return;
 
@@ -64,12 +64,16 @@ class _CanvasPageState extends State<CanvasPage> {
         onTap: _addScrapFromGallery,
       ),
       SpeedDialChild(
+        label: "AddImage: Clip board",
+        onTap: _addScrapFromClipBoard,
+      ),
+      SpeedDialChild(
         label: "Add Image: URL",
         onTap: _addScrapFromURL,
       ),
       if (isPremiumUser || kDebugMode) ...{
         SpeedDialChild(
-          label: "Add Images: Pinterest boards",
+          label: "Add Images: Pinterest idea boards",
           onTap: null,
         )
       }

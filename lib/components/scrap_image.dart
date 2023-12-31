@@ -11,6 +11,15 @@ class ScrapImage extends StatefulWidget {
 }
 
 class _ScrapImageState extends State<ScrapImage> {
+  var focusNode = FocusNode();
+  var controller = TransformableBoxController();
+  @override
+  void dispose() {
+    focusNode.dispose();
+    controller.dispose();
+    super.dispose();
+  }
+
   late Rect _rect = _getRectFrom(widget.provider);
 
   Rect _getRectFrom(ImageProvider provider) {
