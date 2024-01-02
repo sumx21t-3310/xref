@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xref/pages/start_page.dart';
+import 'package:xref/start_page/start_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
