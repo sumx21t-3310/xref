@@ -3,7 +3,10 @@ import 'package:xref/start_page/start_page.dart';
 import 'package:xref/start_page/thumbnail_card.dart';
 
 class StartPageBody extends StatelessWidget {
-  StartPageBody({super.key, required this.thumbnails});
+  StartPageBody({
+    super.key,
+    required this.thumbnails,
+  });
 
   final List<ThumbnailData> thumbnails;
 

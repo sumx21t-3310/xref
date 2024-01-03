@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../components/title_bar.dart';
+import 'title_bar.dart';
 
 class SwitchPlatform extends StatelessWidget {
   const SwitchPlatform({

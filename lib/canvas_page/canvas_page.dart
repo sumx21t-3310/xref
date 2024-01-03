@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:undo/undo.dart';
+import 'package:xref/application/file_download.dart';
+import 'package:xref/canvas_page/canvas_page_app_bar.dart';
 import 'package:xref/canvas_page/canvas_page_body.dart';
 import 'package:xref/canvas_page/canvas_page_speed_dial.dart';
 import 'package:xref/canvas_page/scrap_image.dart';
 import 'package:xref/components/url_dialog.dart';
-import 'package:xref/lib/file_download.dart';
 import 'package:xref/settings_page/settings_page.dart';
 
 class CanvasPage extends StatefulWidget {
@@ -20,26 +21,32 @@ class CanvasPage extends StatefulWidget {
 
 class _CanvasPageState extends State<CanvasPage> {
   var _visibleGrid = true;
-  var isPremiumUser = false;
-  var isCameraSupport = false;
+  final isPremiumUser = false;
+  final isCameraSupported = false;
 
   String url = "";
-  var history = ChangeStack(limit: 50);
-  var scraps = <Widget>[];
-  var images = <File>[];
+  final _history = ChangeStack(limit: 50);
+  var _scraps = <Widget>[];
+  final _images = <File>[];
 
   Future _addScrapFromGallery() async {
     final picker = ImagePicker();
     final xFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (xFile == null) return;
+
+    final file = File(xFile.path);
     final image = FileImage(File(xFile.path));
     _addScrap(image);
   }
 
-  void _addScrapFromClipBoard() {}
+  Future _addScrapFromClipBoard() async {}
 
-  Future<void> _addScrapFromURL() async {
+  Future _addScrapFromPinterestBoard() async {}
+
+  Future _addScrapTakePhoto() async {}
+
+  Future _addScrapFromURL() async {
     url = (await showURLDialog(context, "")) ?? "";
 
     if (url.isEmpty) return;
@@ -51,55 +58,26 @@ class _CanvasPageState extends State<CanvasPage> {
       return;
     }
 
-    images.add(file);
     var image = FileImage(file);
 
     _addScrap(image);
   }
 
-  void _addScrap(ImageProvider image) {
-    history.add(
+  Future _addScrap(ImageProvider image) async {
+    var directory = await getApplicationDocumentsDirectory();
+
+    _history.add(
       Change(
-        [...scraps],
-        () => setState(() => scraps.add(ScrapImage(provider: image))),
-        (oldValue) => setState(() => scraps = [...oldValue]),
+        [..._scraps],
+        () => setState(() => _scraps.add(ScrapImage(provider: image))),
+        (oldValue) => setState(() => _scraps = [...oldValue]),
       ),
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      title: Row(
-        children: [
-          IconButton(
-              onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsPage(),
-                    ),
-                  ),
-              icon: const Icon(Icons.settings)),
-          Switch(
-            value: _visibleGrid,
-            onChanged: (value) => setState(
-              () {
-                _visibleGrid = value;
-              },
-            ),
-          )
-        ],
-      ),
-      actions: [
-        IconButton(
-            tooltip: "undo",
-            onPressed: history.canUndo ? history.undo : null,
-            icon: const Icon(Icons.undo)),
-        IconButton(
-            tooltip: "redo",
-            onPressed: history.canRedo ? history.redo : null,
-            icon: const Icon(Icons.redo)),
-      ],
+  void routeSettingsPage() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const SettingsPage()),
     );
   }
 
@@ -107,14 +85,29 @@ class _CanvasPageState extends State<CanvasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: appBar(),
-      body: CanvasPageBody(),
+      appBar: CanvasPageAppBar(
+        onSettingsTap: routeSettingsPage,
+        visibleGrid: _visibleGrid,
+        onGridToggle: (changeValue) {
+          setState(() => _visibleGrid = changeValue);
+        },
+        canUndo: _history.canUndo,
+        onUndo: _history.undo,
+        canRedo: _history.canRedo,
+        onRedo: _history.redo,
+      ),
+      body: CanvasPageBody(
+        visibleGrid: _visibleGrid,
+        children: _scraps,
+      ),
       floatingActionButton: CanvasPageSpeedDial(
         onGalleryTap: _addScrapFromGallery,
         onClipBoardTap: _addScrapFromClipBoard,
         onURLTap: _addScrapFromURL,
-        onPinterestTap: () {},
+        onPinterestTap: _addScrapFromPinterestBoard,
+        onTakePhoto: _addScrapTakePhoto,
         isPremiumUser: isPremiumUser,
+        isCameraSupported: isCameraSupported,
       ),
     );
   }

@@ -10,13 +10,17 @@ class CanvasPageSpeedDial extends StatelessWidget {
     required this.onURLTap,
     required this.onPinterestTap,
     required this.isPremiumUser,
+    required this.isCameraSupported,
+    required this.onTakePhoto,
   });
 
   final Function() onGalleryTap;
   final Function() onClipBoardTap;
   final Function() onURLTap;
   final Function() onPinterestTap;
+  final Function() onTakePhoto;
   final bool isPremiumUser;
+  final bool isCameraSupported;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,13 @@ class CanvasPageSpeedDial extends StatelessWidget {
       if (isPremiumUser || kDebugMode) ...{
         SpeedDialChild(
           label: "Add Images: Pinterest idea boards",
-          onTap: null,
+          onTap: onPinterestTap,
+        )
+      },
+      if (isCameraSupported || kDebugMode) ...{
+        SpeedDialChild(
+          label: "Add Images: Pinterest idea boards",
+          onTap: onTakePhoto,
         )
       }
     ];

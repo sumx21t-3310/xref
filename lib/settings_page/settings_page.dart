@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xref/lib/switch_platform.dart';
+import 'package:xref/components/switch_platform.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
