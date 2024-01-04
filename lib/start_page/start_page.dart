@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:xref/start_page/start_page_app_bar.dart';
+import 'package:xref/start_page/thumbnail_data.dart';
 
 import 'thumbnail_card.dart';
 
-class ThumbnailData {
-  ThumbnailData(this.title, this.image);
-
-  final String title;
-  final ImageProvider image;
-}
-
 class StartPage extends StatefulWidget {
-  const StartPage({Key? key}) : super(key: key);
+  const StartPage({super.key});
 
   @override
   _StartPageState createState() => _StartPageState();
@@ -29,7 +23,7 @@ class _StartPageState extends State<StartPage> {
   }
 
   void addThumbnail() {
-    var image = NetworkImage("https://source.unsplash.com/random");
+    var image = const NetworkImage("https://source.unsplash.com/random");
     var number = thumbnails.length;
     setState(
       () => thumbnails.add(

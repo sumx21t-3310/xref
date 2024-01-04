@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
+import 'package:xref/application/app_config.dart';
 
 class ScrapImage extends StatefulWidget {
   ScrapImage({super.key, required this.provider});
@@ -13,6 +14,7 @@ class ScrapImage extends StatefulWidget {
 class _ScrapImageState extends State<ScrapImage> {
   var focusNode = FocusNode();
   var controller = TransformableBoxController();
+
   @override
   void dispose() {
     focusNode.dispose();
@@ -24,7 +26,7 @@ class _ScrapImageState extends State<ScrapImage> {
 
   Rect _getRectFrom(ImageProvider provider) {
     return Rect.fromCenter(
-      center: MediaQuery.of(context).size.center(Offset.zero),
+      center: AppConfig.viewSize.center(Offset.zero),
       width: 400,
       height: 400,
     );

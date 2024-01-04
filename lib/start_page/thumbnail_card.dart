@@ -3,10 +3,10 @@ import 'package:xref/canvas_page/canvas_page.dart';
 
 class ThumbnailCard extends StatefulWidget {
   const ThumbnailCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.thumbnailImage,
-  }) : super(key: key);
+  });
 
   final String title;
   final ImageProvider thumbnailImage;

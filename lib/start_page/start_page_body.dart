@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:xref/start_page/start_page.dart';
 import 'package:xref/start_page/thumbnail_card.dart';
+import 'package:xref/start_page/thumbnail_data.dart';
 
 class StartPageBody extends StatelessWidget {
-  StartPageBody({
+  const StartPageBody({
     super.key,
     required this.thumbnails,
   });

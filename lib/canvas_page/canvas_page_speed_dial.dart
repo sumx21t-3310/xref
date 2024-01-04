@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -24,28 +23,28 @@ class CanvasPageSpeedDial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var options = [
+    final options = [
       SpeedDialChild(
         label: "Add Image: Photo Gallery",
         onTap: onGalleryTap,
       ),
       SpeedDialChild(
-        label: "AddImage: Clip board",
+        label: "AddImage: Past clip board",
         onTap: onClipBoardTap,
       ),
       SpeedDialChild(
         label: "Add Image: URL",
         onTap: onURLTap,
       ),
-      if (isPremiumUser || kDebugMode) ...{
+      if (isPremiumUser) ...{
         SpeedDialChild(
           label: "Add Images: Pinterest idea boards",
           onTap: onPinterestTap,
         )
       },
-      if (isCameraSupported || kDebugMode) ...{
+      if (isCameraSupported) ...{
         SpeedDialChild(
-          label: "Add Images: Pinterest idea boards",
+          label: "Add Images: Take Photo",
           onTap: onTakePhoto,
         )
       }

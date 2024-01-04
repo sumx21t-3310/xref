@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 Future<File?> downloadFile(Uri url, Directory directory,
@@ -30,4 +31,8 @@ String? _getFileNameFromContentDisposition(Response res) {
   if (match.groupCount != 1) return null;
 
   return match.group(1);
+}
+
+Future<File?> copyToDocumentDirectory(File file, Directory directory) async {
+  return await file.copy("${directory.path}/${basename(file.path)}");
 }
