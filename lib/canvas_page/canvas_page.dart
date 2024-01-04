@@ -66,12 +66,14 @@ class _CanvasPageState extends State<CanvasPage> {
   Future _addScrap(ImageProvider image) async {
     var directory = await getApplicationDocumentsDirectory();
 
-    _history.add(
-      Change(
-        [..._scraps],
-        () => setState(() => _scraps.add(ScrapImage(provider: image))),
-        (oldValue) => setState(() => _scraps = [...oldValue]),
-      ),
+    _history.addGroup(
+      [
+        Change(
+          [..._scraps],
+          () => setState(() => _scraps.add(ScrapImage(provider: image))),
+          (oldValue) => setState(() => _scraps = [...oldValue]),
+        ),
+      ],
     );
   }
 
