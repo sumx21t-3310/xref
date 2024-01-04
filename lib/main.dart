@@ -1,20 +1,23 @@
+import 'dart:io';
+
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:xref/Pages/CanvasPage.dart';
 
-void main() => runApp(const App());
+import 'app.dart';
 
-class App extends StatelessWidget {
-  const App({super.key});
+void main() {
+  runApp(const App());
+  desktopEnvSetup();
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'xref',
-        debugShowCheckedModeBanner: true,
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.deepPurple, brightness: Brightness.dark),
-            useMaterial3: true),
-        home: const CanvasPage());
+void desktopEnvSetup() {
+  if ((Platform.isWindows || Platform.isMacOS) == false) {
+    return;
   }
+  doWhenWindowReady(() {
+    appWindow.size = const Size(600, 400);
+    appWindow.minSize = const Size(300, 300);
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
 }
