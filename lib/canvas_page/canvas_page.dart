@@ -22,7 +22,9 @@ class CanvasPage extends StatefulWidget {
 class _CanvasPageState extends State<CanvasPage> {
   var _visibleGrid = true;
   final isPremiumUser = false;
-  final isCameraSupported = false;
+
+  bool get isCameraSupported =>
+      ImagePicker.platform.supportsImageSource(ImageSource.camera);
 
   String url = "";
   final _history = ChangeStack(limit: 50);
@@ -44,7 +46,18 @@ class _CanvasPageState extends State<CanvasPage> {
 
   Future _addScrapFromPinterestBoard() async {}
 
-  Future _addScrapTakePhoto() async {}
+  Future _addScrapTakePhoto() async {
+    if (isCameraSupported == false) return;
+
+    final picker = ImagePicker();
+    final xFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (xFile == null) return;
+
+    final file = File(xFile.path);
+    final image = FileImage(File(xFile.path));
+    _addScrap(image);
+  }
 
   Future _addScrapFromURL() async {
     url = (await showURLDialog(context, "")) ?? "";
