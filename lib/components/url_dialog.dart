@@ -1,46 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class URLDialog extends StatefulWidget {
-  const URLDialog({Key? key, this.text}) : super(key: key);
+class URLDialog extends HookWidget {
+  const URLDialog({super.key, this.text});
+
   final String? text;
 
   @override
-  _URLDialogState createState() => _URLDialogState();
-}
-
-class _URLDialogState extends State<URLDialog> {
-  final controller = TextEditingController();
-  final focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    controller.text = widget.text ?? "";
-    focusNode.addListener(
-      () {
-        if (focusNode.hasFocus) {
-          controller.selection = TextSelection(
-              baseOffset: 0, extentOffset: controller.text.length);
-        }
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = useTextEditingController();
+    final node = useFocusNode();
+
     return AlertDialog(
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: TextFormField(
           autofocus: true,
-          focusNode: focusNode,
+          focusNode: node,
           controller: controller,
           onFieldSubmitted: (_) => Navigator.of(context).pop(controller.text),
           decoration: const InputDecoration(

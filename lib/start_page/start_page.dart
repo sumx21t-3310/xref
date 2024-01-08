@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:xref/application/save_data.dart';
 import 'package:xref/start_page/start_page_app_bar.dart';
-import 'package:xref/start_page/thumbnail_data.dart';
 
 import 'thumbnail_card.dart';
 
@@ -12,26 +13,31 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  List<ThumbnailData> thumbnails = [];
+  late List<SaveData> saveDataList = [];
+
+  @override
+  void initState() async {
+    super.initState();
+  }
+
+  Future<List<SaveData>> findSaveData() async {
+    List<SaveData> result = [];
+    var dir = await getApplicationDocumentsDirectory();
+
+    return result;
+  }
 
   void deleteThumbnail() {
-    if (thumbnails.isEmpty) return;
+    if (saveDataList.isEmpty) return;
 
     setState(() {
-      thumbnails.removeAt(0);
+      saveDataList.removeAt(0);
     });
   }
 
   void addThumbnail() {
-    var image = const NetworkImage("https://source.unsplash.com/random");
-    var number = thumbnails.length;
     setState(
-      () => thumbnails.add(
-        ThumbnailData(
-          "untitled $number",
-          image,
-        ),
-      ),
+      () => saveDataList.add(SaveData()),
     );
   }
 
@@ -41,12 +47,9 @@ class _StartPageState extends State<StartPage> {
       maxCrossAxisExtent: 200,
       mainAxisSpacing: 20,
       crossAxisSpacing: 10,
-      children: thumbnails
+      children: saveDataList
           .map(
-            (element) => ThumbnailCard(
-              title: element.title,
-              thumbnailImage: element.image,
-            ),
+            (saveData) => ThumbnailCard(saveData: saveData),
           )
           .toList(),
     );

@@ -33,6 +33,6 @@ String? _getFileNameFromContentDisposition(Response res) {
   return match.group(1);
 }
 
-Future<File?> copyToDocumentDirectory(File file, Directory directory) async {
+Future<File> copyToDocumentDirectory(File file, Directory directory) async {
   return await file.copy("${directory.path}/${basename(file.path)}");
 }

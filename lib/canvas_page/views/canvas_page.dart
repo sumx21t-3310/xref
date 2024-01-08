@@ -1,35 +1,46 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:undo/undo.dart';
+import 'package:xref/application/app_config.dart';
 import 'package:xref/application/file_download.dart';
-import 'package:xref/canvas_page/canvas_page_app_bar.dart';
-import 'package:xref/canvas_page/canvas_page_body.dart';
-import 'package:xref/canvas_page/canvas_page_speed_dial.dart';
-import 'package:xref/canvas_page/scrap_image.dart';
+import 'package:xref/application/save_data.dart';
+import 'package:xref/canvas_page/states/canvas_body_transformation_controller_notifier.dart';
+import 'package:xref/canvas_page/states/history_notifier.dart';
+import 'package:xref/canvas_page/views/canvas_page_app_bar.dart';
+import 'package:xref/canvas_page/views/canvas_page_body.dart';
+import 'package:xref/canvas_page/views/scrap_image.dart';
 import 'package:xref/components/url_dialog.dart';
 import 'package:xref/settings_page/settings_page.dart';
 
-class CanvasPage extends StatefulWidget {
-  const CanvasPage({super.key});
+import 'canvas_page_speed_dial.dart';
+
+class CanvasPage extends ConsumerStatefulWidget {
+  const CanvasPage({super.key, required this.saveData});
 
   @override
-  State<CanvasPage> createState() => _CanvasPageState();
+  ConsumerState<CanvasPage> createState() => _CanvasPageState();
+  final SaveData saveData;
 }
 
-class _CanvasPageState extends State<CanvasPage> {
+class _CanvasPageState extends ConsumerState<CanvasPage> with RouteAware {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didPop() {}
+
   var _visibleGrid = true;
   final isPremiumUser = false;
 
-  bool get isCameraSupported =>
-      ImagePicker.platform.supportsImageSource(ImageSource.camera);
-
   String url = "";
-  final _history = ChangeStack(limit: 50);
-  var _scraps = <Widget>[];
-  final _images = <File>[];
+  var _files = <File>[];
+  var _scraps = <ScrapImage>[];
 
   Future _addScrapFromGallery() async {
     final picker = ImagePicker();
@@ -38,8 +49,7 @@ class _CanvasPageState extends State<CanvasPage> {
     if (xFile == null) return;
 
     final file = File(xFile.path);
-    final image = FileImage(File(xFile.path));
-    _addScrap(image);
+    _addImageFile(file);
   }
 
   Future _addScrapFromClipBoard() async {}
@@ -47,16 +57,13 @@ class _CanvasPageState extends State<CanvasPage> {
   Future _addScrapFromPinterestBoard() async {}
 
   Future _addScrapTakePhoto() async {
-    if (isCameraSupported == false) return;
-
     final picker = ImagePicker();
     final xFile = await picker.pickImage(source: ImageSource.camera);
 
     if (xFile == null) return;
 
     final file = File(xFile.path);
-    final image = FileImage(File(xFile.path));
-    _addScrap(image);
+    _addImageFile(file);
   }
 
   Future _addScrapFromURL() async {
@@ -71,20 +78,34 @@ class _CanvasPageState extends State<CanvasPage> {
       return;
     }
 
-    var image = FileImage(file);
-
-    _addScrap(image);
+    _addImageFile(file);
   }
 
-  Future _addScrap(ImageProvider image) async {
+  Future _addImageFile(File file) async {
     var directory = await getApplicationDocumentsDirectory();
+    var savedFile = await copyToDocumentDirectory(file, directory);
 
-    _history.addGroup(
+    var history = ref.watch(historyNotifierProvider);
+    var controller =
+        ref.read(canvasBodyTransformationControllerNotifierProvider.notifier);
+    controller.setInitialPosition();
+    history.addGroup(
       [
         Change(
           [..._scraps],
-          () => setState(() => _scraps.add(ScrapImage(provider: image))),
+          () {
+            setState(() {
+              _scraps.add(ScrapImage(
+                file: file,
+              ));
+            });
+          },
           (oldValue) => setState(() => _scraps = [...oldValue]),
+        ),
+        Change(
+          [..._files],
+          () => setState(() => _files.add(savedFile)),
+          (oldValue) => setState(() => _files = [...oldValue]),
         ),
       ],
     );
@@ -98,18 +119,26 @@ class _CanvasPageState extends State<CanvasPage> {
 
   @override
   Widget build(BuildContext context) {
+    var history = ref.watch(historyNotifierProvider);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CanvasPageAppBar(
         onSettingsTap: routeSettingsPage,
+        onCenterFocusTap: () {
+          final notifier = ref.watch(
+            canvasBodyTransformationControllerNotifierProvider.notifier,
+          );
+          notifier.setInitialPosition();
+        },
         visibleGrid: _visibleGrid,
         onGridToggle: (changeValue) {
           setState(() => _visibleGrid = changeValue);
         },
-        canUndo: _history.canUndo,
-        onUndo: _history.undo,
-        canRedo: _history.canRedo,
-        onRedo: _history.redo,
+        canUndo: history.canUndo,
+        onUndo: history.undo,
+        canRedo: history.canRedo,
+        onRedo: history.redo,
       ),
       body: CanvasPageBody(
         visibleGrid: _visibleGrid,
@@ -122,7 +151,7 @@ class _CanvasPageState extends State<CanvasPage> {
         onPinterestTap: _addScrapFromPinterestBoard,
         onTakePhoto: _addScrapTakePhoto,
         isPremiumUser: isPremiumUser,
-        isCameraSupported: isCameraSupported,
+        isCameraSupported: AppConfig.isCameraSupported,
       ),
     );
   }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:xref/application/save_data.dart';
 import 'package:xref/start_page/thumbnail_card.dart';
-import 'package:xref/start_page/thumbnail_data.dart';
 
 class StartPageBody extends StatelessWidget {
   const StartPageBody({
     super.key,
-    required this.thumbnails,
+    required this.saveDataList,
   });
 
-  final List<ThumbnailData> thumbnails;
+  final List<SaveData> saveDataList;
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +17,8 @@ class StartPageBody extends StatelessWidget {
       maxCrossAxisExtent: 200,
       mainAxisSpacing: 20,
       crossAxisSpacing: 10,
-      children: thumbnails
-          .map(
-            (element) => ThumbnailCard(
-              title: element.title,
-              thumbnailImage: element.image,
-            ),
-          )
+      children: saveDataList
+          .map((saveData) => ThumbnailCard(saveData: saveData))
           .toList(),
     );
   }

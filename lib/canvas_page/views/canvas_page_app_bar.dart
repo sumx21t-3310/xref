@@ -6,6 +6,7 @@ class CanvasPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CanvasPageAppBar({
     super.key,
     required this.onSettingsTap,
+    required this.onCenterFocusTap,
     required this.visibleGrid,
     required this.onGridToggle,
     required this.canUndo,
@@ -15,6 +16,7 @@ class CanvasPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   final Function() onSettingsTap;
+  final Function() onCenterFocusTap;
   final bool visibleGrid;
   final Function(bool) onGridToggle;
   final bool canUndo;
@@ -35,6 +37,10 @@ class CanvasPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             onPressed: onSettingsTap,
             icon: const Icon(Icons.settings),
+          ),
+          IconButton(
+            onPressed: onCenterFocusTap,
+            icon: const Icon(Icons.center_focus_strong),
           ),
           Switch(
             value: visibleGrid,

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:xref/canvas_page/canvas_page.dart';
+import 'package:xref/application/save_data.dart';
+import 'package:xref/canvas_page/views/canvas_page.dart';
 
-class ThumbnailCard extends StatefulWidget {
+class ThumbnailCard extends StatelessWidget {
   const ThumbnailCard({
     super.key,
-    required this.title,
-    required this.thumbnailImage,
+    required this.saveData,
   });
 
-  final String title;
-  final ImageProvider thumbnailImage;
+  final SaveData saveData;
 
-  @override
-  State<ThumbnailCard> createState() => _ThumbnailCardState();
-}
-
-class _ThumbnailCardState extends State<ThumbnailCard> {
   @override
   Widget build(BuildContext context) {
+    ImageProvider image =
+        const NetworkImage("https://source.unsplash.com/random");
+    if (saveData.files?.isNotEmpty ?? false) {
+      image = FileImage(saveData.files![0]);
+    }
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -26,10 +25,16 @@ class _ThumbnailCardState extends State<ThumbnailCard> {
             height: 100,
             width: 100,
             child: GestureDetector(
-              child: Image(image: widget.thumbnailImage),
+              child: Image(
+                image: image,
+              ),
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (builder) => const CanvasPage()),
+                  MaterialPageRoute(
+                    builder: (builder) => CanvasPage(
+                      saveData: saveData,
+                    ),
+                  ),
                 );
               },
             ),
@@ -37,7 +42,7 @@ class _ThumbnailCardState extends State<ThumbnailCard> {
           Center(
             child: FittedBox(
               child: Text(
-                widget.title,
+                saveData.title ?? "untitled",
                 textAlign: TextAlign.center,
               ),
             ),

@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
 
 void main() {
-  runApp(const App());
+  const app = App();
+  runApp(const ProviderScope(child: app));
   desktopEnvSetup();
 }
 
