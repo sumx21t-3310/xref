@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'history_notifier.dart';
+part of 'grid_toggle_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$historyNotifierHash() => r'e2026e3807c5cd05cdb2dd521087ebf09f52d6b2';
+String _$gridToggleNotifierHash() =>
+    r'ddc0803bddf0163be4d45c1c42f31207e813dbf6';
 
-/// See also [HistoryNotifier].
-@ProviderFor(HistoryNotifier)
-final historyNotifierProvider =
-    AutoDisposeNotifierProvider<HistoryNotifier, ChangeStack>.internal(
-  HistoryNotifier.new,
-  name: r'historyNotifierProvider',
+/// See also [GridToggleNotifier].
+@ProviderFor(GridToggleNotifier)
+final gridToggleNotifierProvider =
+    AutoDisposeNotifierProvider<GridToggleNotifier, bool>.internal(
+  GridToggleNotifier.new,
+  name: r'gridToggleNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$historyNotifierHash,
+      : _$gridToggleNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$HistoryNotifier = AutoDisposeNotifier<ChangeStack>;
+typedef _$GridToggleNotifier = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

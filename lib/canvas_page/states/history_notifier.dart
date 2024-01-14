@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:undo/undo.dart';
 import 'package:xref/application/app_config.dart';
@@ -13,7 +11,9 @@ class HistoryNotifier extends _$HistoryNotifier {
     return ChangeStack(limit: AppConfig.undoLimit);
   }
 
-  void addFile(File file) {
-    state.addGroup([]);
-  }
+  void add(List<Change> changeGroup) => state.addGroup(changeGroup);
+
+  void undo() => state.undo();
+
+  void redo() => state.redo();
 }

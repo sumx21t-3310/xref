@@ -11,9 +11,9 @@ String _$canvasBodyTransformationControllerNotifierHash() =>
 
 /// See also [CanvasBodyTransformationControllerNotifier].
 @ProviderFor(CanvasBodyTransformationControllerNotifier)
-final canvasBodyTransformationControllerNotifierProvider =
-    AutoDisposeNotifierProvider<CanvasBodyTransformationControllerNotifier,
-        TransformationController>.internal(
+final transformationControllerNotifierProvider = AutoDisposeNotifierProvider<
+    CanvasBodyTransformationControllerNotifier,
+    TransformationController>.internal(
   CanvasBodyTransformationControllerNotifier.new,
   name: r'canvasBodyTransformationControllerNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')

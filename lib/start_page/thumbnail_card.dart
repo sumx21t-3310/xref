@@ -14,9 +14,7 @@ class ThumbnailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     ImageProvider image =
         const NetworkImage("https://source.unsplash.com/random");
-    if (saveData.files?.isNotEmpty ?? false) {
-      image = FileImage(saveData.files![0]);
-    }
+
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +40,7 @@ class ThumbnailCard extends StatelessWidget {
           Center(
             child: FittedBox(
               child: Text(
-                saveData.title ?? "untitled",
+                saveData.title,
                 textAlign: TextAlign.center,
               ),
             ),

@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'scraps_notifier.dart';
+part of 'save_data_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$scrapsNotifierHash() => r'3c07d371a611bbca8526cd2c77ee37b50a56ac8a';
+String _$saveDataNotifierHash() => r'063e4250e9dbbc3ca2133ce6cc47b23fa66d247a';
 
-/// See also [ScrapsNotifier].
-@ProviderFor(ScrapsNotifier)
-final scrapsNotifierProvider =
-    AutoDisposeNotifierProvider<ScrapsNotifier, List<ScrapImage>>.internal(
-  ScrapsNotifier.new,
-  name: r'scrapsNotifierProvider',
+/// See also [SaveDataNotifier].
+@ProviderFor(SaveDataNotifier)
+final saveDataNotifierProvider =
+    AutoDisposeNotifierProvider<SaveDataNotifier, SaveData>.internal(
+  SaveDataNotifier.new,
+  name: r'saveDataNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$scrapsNotifierHash,
+      : _$saveDataNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ScrapsNotifier = AutoDisposeNotifier<List<ScrapImage>>;
+typedef _$SaveDataNotifier = AutoDisposeNotifier<SaveData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

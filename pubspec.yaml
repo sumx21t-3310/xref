@@ -14,7 +14,7 @@ dependencies:
 
   cupertino_icons:
   flutter_box_transform:
-  image_size_getter: ^2.1.2
+  image_size_getter:
   undo:
   flutter_speed_dial:
   image_picker:
@@ -26,6 +26,8 @@ dependencies:
   flutter_hooks:
   flutter_riverpod:
   riverpod_annotation:
+  freezed_annotation:
+  json_annotation:
 
 
 dev_dependencies:
@@ -34,6 +36,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints:
+  json_serializable:
+  freezed:
 
 flutter:
   uses-material-design: true

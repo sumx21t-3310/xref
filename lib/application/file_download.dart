@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
@@ -33,6 +34,13 @@ String? _getFileNameFromContentDisposition(Response res) {
   return match.group(1);
 }
 
-Future<File> copyToDocumentDirectory(File file, Directory directory) async {
-  return await file.copy("${directory.path}/${basename(file.path)}");
+Future<File> copyToDirectory(File file, Directory directory) async {
+  var ext = extension(file.path);
+  const uuid = Uuid();
+  var fileName = uuid.v7();
+  var copyPath = "${directory.path}/$fileName$ext";
+
+  debugPrint(copyPath);
+
+  return await file.copy(copyPath);
 }

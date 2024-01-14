@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:undo/undo.dart';
 import 'package:xref/application/app_config.dart';
 import 'package:xref/application/file_download.dart';
 import 'package:xref/application/save_data.dart';
+import 'package:xref/application/save_data_notifier.dart';
 import 'package:xref/canvas_page/states/canvas_body_transformation_controller_notifier.dart';
+import 'package:xref/canvas_page/states/grid_toggle_notifier.dart';
 import 'package:xref/canvas_page/states/history_notifier.dart';
 import 'package:xref/canvas_page/views/canvas_page_app_bar.dart';
 import 'package:xref/canvas_page/views/canvas_page_body.dart';
-import 'package:xref/canvas_page/views/scrap_image.dart';
+import 'package:xref/canvas_page/views/imageBox.dart';
 import 'package:xref/components/url_dialog.dart';
 import 'package:xref/settings_page/settings_page.dart';
 
@@ -27,20 +28,22 @@ class CanvasPage extends ConsumerStatefulWidget {
 }
 
 class _CanvasPageState extends ConsumerState<CanvasPage> with RouteAware {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didPop() {}
-
-  var _visibleGrid = true;
+  /// region state var.
   final isPremiumUser = false;
+  final _scraps = <ImageBox>[];
 
-  String url = "";
-  var _files = <File>[];
-  var _scraps = <ScrapImage>[];
+  /// endregion
+
+  /// region canvas page functions
+  Future _initScraps(List<File> files) async {
+    for (var file in files) {
+      _scraps.add(ImageBox(file: file));
+    }
+
+    ref
+        .read(transformationControllerNotifierProvider.notifier)
+        .setInitialPosition();
+  }
 
   Future _addScrapFromGallery() async {
     final picker = ImagePicker();
@@ -67,7 +70,7 @@ class _CanvasPageState extends ConsumerState<CanvasPage> with RouteAware {
   }
 
   Future _addScrapFromURL() async {
-    url = (await showURLDialog(context, "")) ?? "";
+    var url = (await showURLDialog(context, "")) ?? "";
 
     if (url.isEmpty) return;
 
@@ -82,33 +85,12 @@ class _CanvasPageState extends ConsumerState<CanvasPage> with RouteAware {
   }
 
   Future _addImageFile(File file) async {
-    var directory = await getApplicationDocumentsDirectory();
-    var savedFile = await copyToDocumentDirectory(file, directory);
-
-    var history = ref.watch(historyNotifierProvider);
-    var controller =
-        ref.read(canvasBodyTransformationControllerNotifierProvider.notifier);
-    controller.setInitialPosition();
-    history.addGroup(
-      [
-        Change(
-          [..._scraps],
-          () {
-            setState(() {
-              _scraps.add(ScrapImage(
-                file: file,
-              ));
-            });
-          },
-          (oldValue) => setState(() => _scraps = [...oldValue]),
-        ),
-        Change(
-          [..._files],
-          () => setState(() => _files.add(savedFile)),
-          (oldValue) => setState(() => _files = [...oldValue]),
-        ),
-      ],
-    );
+    var directory = await getApplicationSupportDirectory();
+    var savedFile = await copyToDirectory(file, directory);
+    ref
+        .read(transformationControllerNotifierProvider.notifier)
+        .setInitialPosition();
+    ref.read(saveDataNotifierProvider.notifier).addFile(savedFile);
   }
 
   void routeSettingsPage() {
@@ -117,23 +99,28 @@ class _CanvasPageState extends ConsumerState<CanvasPage> with RouteAware {
     );
   }
 
+  /// endregion
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var history = ref.watch(historyNotifierProvider);
+    var controller =
+        ref.watch(transformationControllerNotifierProvider.notifier);
+    var visibleGrid = ref.watch(gridToggleNotifierProvider);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CanvasPageAppBar(
         onSettingsTap: routeSettingsPage,
-        onCenterFocusTap: () {
-          final notifier = ref.watch(
-            canvasBodyTransformationControllerNotifierProvider.notifier,
-          );
-          notifier.setInitialPosition();
-        },
-        visibleGrid: _visibleGrid,
-        onGridToggle: (changeValue) {
-          setState(() => _visibleGrid = changeValue);
+        onCenterFocusTap: () => controller.setInitialPosition(),
+        visibleGrid: visibleGrid,
+        onGridToggle: (value) {
+          ref.read(gridToggleNotifierProvider.notifier).toggle(value);
         },
         canUndo: history.canUndo,
         onUndo: history.undo,
@@ -141,7 +128,6 @@ class _CanvasPageState extends ConsumerState<CanvasPage> with RouteAware {
         onRedo: history.redo,
       ),
       body: CanvasPageBody(
-        visibleGrid: _visibleGrid,
         children: _scraps,
       ),
       floatingActionButton: CanvasPageSpeedDial(
