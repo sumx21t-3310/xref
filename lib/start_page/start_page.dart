@@ -3,43 +3,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:xref/application/save_data.dart';
 import 'package:xref/application/save_data_repository.dart';
+import 'package:xref/canvas_page/canvas_page.dart';
+import 'package:xref/components/push_page.dart';
 import 'package:xref/start_page/start_page_app_bar.dart';
+import 'package:xref/start_page/start_page_drawer.dart';
 
 import 'thumbnail_card.dart';
 
-class StartPage extends ConsumerStatefulWidget {
+class StartPage extends ConsumerWidget {
   const StartPage({super.key});
 
-  @override
-  _StartPageState createState() => _StartPageState();
-}
-
-class _StartPageState extends ConsumerState<StartPage> {
-  void deleteSaveData() {
-    setState(() {
-      SaveDataRepository().delete(
-        SaveData(
-          id: const Uuid().v7(),
-          title: 'untitled',
-          thumbnail: "",
-          files: [],
-        ),
-      );
-    });
-  }
-
-  void addSaveData() {
+  void addSaveData(WidgetRef ref) {
     var newData = SaveData(
       title: "untitled",
       id: const Uuid().v7(),
-      files: [],
-      thumbnail: "",
+      boxes: [],
     );
 
     ref.read(saveDataRepositoryProvider.notifier).save(newData);
   }
 
-  Widget body() {
+  void deleteData(WidgetRef ref, SaveData saveData) {
+    ref.read(saveDataRepositoryProvider.notifier).delete(saveData);
+  }
+
+  Widget buildBody(BuildContext context, WidgetRef ref) {
     var repository = ref.watch(saveDataRepositoryProvider);
 
     return GridView.extent(
@@ -48,19 +36,33 @@ class _StartPageState extends ConsumerState<StartPage> {
       mainAxisSpacing: 20,
       crossAxisSpacing: 10,
       children: [
-        ...repository.map((saveData) => ThumbnailCard(saveData: saveData))
+        for (var index = 0; index < repository.length; index++) ...{
+          ThumbnailCard(
+            title: repository[index].title,
+            image: const NetworkImage('https://placehold.jp/150x150.png'),
+            onTap: () {
+              pushPage(context, CanvasPage(id: repository[index].id));
+            },
+            onDelete: () => ref
+                .read(saveDataRepositoryProvider.notifier)
+                .delete(repository[index]),
+          )
+        },
       ],
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: StartPageAppBar(
-        onDeleteTap: deleteSaveData,
-        onAddTap: addSaveData,
+      appBar: const StartPageAppBar(),
+      body: buildBody(context, ref),
+      drawer: const StartPageDrawer(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () => addSaveData(ref),
+        child: const Icon(Icons.add),
       ),
-      body: body(),
     );
   }
 }

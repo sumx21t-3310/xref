@@ -1,29 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'canvas_body_transformation_controller_notifier.dart';
+part of 'transformation_controller_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$canvasBodyTransformationControllerNotifierHash() =>
-    r'd66b8796555e18e32a6ebe92cc695b19715fccf7';
+String _$transformationControllerNotifierHash() =>
+    r'3206bf42a2068739f17e64599ce061cf0206c40b';
 
-/// See also [CanvasBodyTransformationControllerNotifier].
-@ProviderFor(CanvasBodyTransformationControllerNotifier)
+/// See also [TransformationControllerNotifier].
+@ProviderFor(TransformationControllerNotifier)
 final transformationControllerNotifierProvider = AutoDisposeNotifierProvider<
-    CanvasBodyTransformationControllerNotifier,
-    TransformationController>.internal(
-  CanvasBodyTransformationControllerNotifier.new,
-  name: r'canvasBodyTransformationControllerNotifierProvider',
+    TransformationControllerNotifier, TransformationController>.internal(
+  TransformationControllerNotifier.new,
+  name: r'transformationControllerNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$canvasBodyTransformationControllerNotifierHash,
+      : _$transformationControllerNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CanvasBodyTransformationControllerNotifier
+typedef _$TransformationControllerNotifier
     = AutoDisposeNotifier<TransformationController>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

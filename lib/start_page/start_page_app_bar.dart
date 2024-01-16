@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:xref/settings_page/settings_page.dart';
+import 'package:xref/application/app_config.dart';
+import 'package:xref/components/push_page.dart';
 
 class StartPageAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const StartPageAppBar({
-    super.key,
-    required this.onDeleteTap,
-    required this.onAddTap,
-  });
-
-  final Function() onDeleteTap;
-  final Function() onAddTap;
+  const StartPageAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: IconButton(
-        icon: const Icon(Icons.settings),
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const SettingsPage(),
-          ),
+      title: GestureDetector(
+        onTap: () {
+          showAboutDialog(
+            context: context,
+            applicationIcon: const Icon(Icons.image),
+            applicationName: AppConfig.appName,
+            applicationVersion: 'version-${AppConfig.version}',
+            applicationLegalese: '(C) 2024 Nebusoku dev Inc.',
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Text('ここにアプリの説明、概要などを表示させます。'),
+              ),
+            ],
+          );
+        },
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [Icon(Icons.image), Text("XREF")],
         ),
       ),
       actions: [
         IconButton(
-          onPressed: onDeleteTap,
-          icon: const Icon(Icons.delete),
+          icon: const Icon(Icons.settings),
+          onPressed: () => pushSettingsPage(context),
         ),
-        IconButton(
-          onPressed: onAddTap,
-          icon: const Icon(Icons.add),
-        )
       ],
+      centerTitle: true,
     );
   }
 

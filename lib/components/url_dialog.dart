@@ -20,9 +20,9 @@ class URLDialog extends HookWidget {
           controller: controller,
           onFieldSubmitted: (_) => Navigator.of(context).pop(controller.text),
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Enter image url',
-          ),
+              border: OutlineInputBorder(),
+              labelText: 'Enter image url',
+              hintText: 'https://~'),
         ),
       ),
       actions: [

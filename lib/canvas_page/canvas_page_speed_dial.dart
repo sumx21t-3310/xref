@@ -54,6 +54,7 @@ class CanvasPageSpeedDial extends StatelessWidget {
       elevation: 0,
       children: options,
       tooltip: "Add Image",
+      mini: true,
       child: const Icon(Icons.add_photo_alternate),
     );
   }

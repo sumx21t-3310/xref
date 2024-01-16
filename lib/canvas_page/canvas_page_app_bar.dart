@@ -42,10 +42,6 @@ class CanvasPageAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: onCenterFocusTap,
             icon: const Icon(Icons.center_focus_strong),
           ),
-          Switch(
-            value: visibleGrid,
-            onChanged: onGridToggle,
-          ),
         ],
       ),
       actions: [

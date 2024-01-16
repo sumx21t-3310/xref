@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xref/application/app_config.dart';
 
-part 'canvas_body_transformation_controller_notifier.g.dart';
+part 'transformation_controller_notifier.g.dart';
 
 @riverpod
-class CanvasBodyTransformationControllerNotifier
-    extends _$CanvasBodyTransformationControllerNotifier {
+class TransformationControllerNotifier
+    extends _$TransformationControllerNotifier {
   @override
   TransformationController build() {
     var controller = TransformationController();
@@ -15,6 +15,7 @@ class CanvasBodyTransformationControllerNotifier
         -AppConfig.viewSize.width / 2,
         -AppConfig.viewSize.height / 2,
       );
+
     return controller;
   }
 

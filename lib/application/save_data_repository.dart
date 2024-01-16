@@ -13,14 +13,18 @@ class SaveDataRepository extends _$SaveDataRepository {
   void save(SaveData saveData) {
     final index = state.indexWhere((e) => e.id == saveData.id);
 
-    state = [...state, saveData];
+    final newState = state;
+
+    if (index >= 0) {
+      delete(saveData);
+    }
+
+    state = [...newState, saveData];
   }
 
   void delete(SaveData saveData) {
-    if (state.isEmpty) return;
     var newState = state;
-
-    newState.remove(saveData);
-    state = newState;
+    newState.removeWhere((s) => saveData.id == s.id);
+    state = [...newState];
   }
 }

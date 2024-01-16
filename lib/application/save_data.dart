@@ -1,24 +1,31 @@
 import 'dart:io';
 
+import 'package:xref/application/box_data.dart';
+
 class SaveData {
   SaveData({
     required this.id,
     required this.title,
-    required this.thumbnail,
-    required this.files,
+    this.thumbnail,
+    required this.boxes,
   });
 
   String id;
   String title;
-  String thumbnail;
-  List<File> files;
+  File? thumbnail;
+  List<BoxData> boxes;
 
-  SaveData copyWith(
-          {String? id, String? title, String? thumbnail, List<File>? files}) =>
-      SaveData(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        thumbnail: thumbnail ?? this.thumbnail,
-        files: files ?? this.files,
-      );
+  SaveData copyWith({
+    String? id,
+    String? title,
+    File? thumbnail,
+    List<BoxData>? boxes,
+  }) {
+    return SaveData(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      thumbnail: thumbnail ?? this.thumbnail,
+      boxes: boxes ?? this.boxes,
+    );
+  }
 }

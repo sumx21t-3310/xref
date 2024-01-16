@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
@@ -39,8 +38,5 @@ Future<File> copyToDirectory(File file, Directory directory) async {
   const uuid = Uuid();
   var fileName = uuid.v7();
   var copyPath = "${directory.path}/$fileName$ext";
-
-  debugPrint(copyPath);
-
   return await file.copy(copyPath);
 }

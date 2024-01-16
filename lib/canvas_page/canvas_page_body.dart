@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xref/application/app_config.dart';
-import 'package:xref/canvas_page/states/canvas_body_transformation_controller_notifier.dart';
-import 'package:xref/canvas_page/states/grid_toggle_notifier.dart';
-import 'package:xref/canvas_page/views/imageBox.dart';
+import 'package:xref/canvas_page/image_box.dart';
 
 class CanvasPageBody extends ConsumerWidget {
   const CanvasPageBody({
     super.key,
     required this.children,
+    required this.controller,
+    required this.visibleGrid,
+    this.onTap,
   });
 
   final List<ImageBox> children;
+  final bool visibleGrid;
+  final TransformationController controller;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(transformationControllerNotifierProvider);
     final viewBorder = Container(
-      color: Colors.black12,
+      // color: Colors.black12,
       width: AppConfig.viewSize.width,
       height: AppConfig.viewSize.height,
     );
-
-    var visibleGrid = ref.watch(gridToggleNotifierProvider);
 
     return Scaffold(
       body: Center(
@@ -35,12 +36,13 @@ class CanvasPageBody extends ConsumerWidget {
               clipBehavior: Clip.none,
               constrained: false,
               transformationController: controller,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  viewBorder,
-                  ...children,
-                ],
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: onTap,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [viewBorder, ...children],
+                ),
               ),
             ),
           ],
@@ -49,7 +51,7 @@ class CanvasPageBody extends ConsumerWidget {
     );
   }
 
-  OverflowBox buildGrid(BuildContext context) {
+  Widget buildGrid(BuildContext context) {
     return OverflowBox(
       child: SizedBox.fromSize(
         size: AppConfig.viewSize,

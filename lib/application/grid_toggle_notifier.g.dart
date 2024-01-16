@@ -7,12 +7,12 @@ part of 'grid_toggle_notifier.dart';
 // **************************************************************************
 
 String _$gridToggleNotifierHash() =>
-    r'ddc0803bddf0163be4d45c1c42f31207e813dbf6';
+    r'c348a35671259c06e520f5075e717f44d4974f29';
 
 /// See also [GridToggleNotifier].
 @ProviderFor(GridToggleNotifier)
 final gridToggleNotifierProvider =
-    AutoDisposeNotifierProvider<GridToggleNotifier, bool>.internal(
+    NotifierProvider<GridToggleNotifier, bool>.internal(
   GridToggleNotifier.new,
   name: r'gridToggleNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final gridToggleNotifierProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$GridToggleNotifier = AutoDisposeNotifier<bool>;
+typedef _$GridToggleNotifier = Notifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

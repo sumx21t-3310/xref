@@ -7,7 +7,7 @@ part of 'save_data_repository.dart';
 // **************************************************************************
 
 String _$saveDataRepositoryHash() =>
-    r'b518c87e7228dc3302aa833dac3ebdbfacb5c8b7';
+    r'602f7600703d303059a919ac625130d15d6d9ec3';
 
 /// See also [SaveDataRepository].
 @ProviderFor(SaveDataRepository)
