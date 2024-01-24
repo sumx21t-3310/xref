@@ -12,6 +12,7 @@ class StartPageDrawer extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
+            arrowColor: Colors.white,
             currentAccountPicture: const CircleAvatar(
               foregroundImage: AssetImage("assets/icon.png"),
             ),

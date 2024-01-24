@@ -128,6 +128,10 @@ class _CanvasPageState extends ConsumerState<CanvasPage> {
         onUndo: ref.read(historyNotifierProvider.notifier).undo,
         canRedo: history.canRedo,
         onRedo: ref.read(historyNotifierProvider.notifier).undo,
+        onCloseCanvasTap:(){
+          ref.read(saveDataRepositoryProvider.notifier).save(saveData);
+          Navigator.of(context).pop();
+        },
       ),
       body: CanvasPageBody(
         controller: controller,

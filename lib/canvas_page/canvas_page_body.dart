@@ -19,7 +19,7 @@ class CanvasPageBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewBorder = Container(
+    final viewBorder = SizedBox(
       // color: Colors.black12,
       width: AppConfig.viewSize.width,
       height: AppConfig.viewSize.height,

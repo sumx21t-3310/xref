@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 import 'package:xref/application/save_data.dart';
+import 'package:xref/application/save_data_notifier.dart';
 import 'package:xref/application/save_data_repository.dart';
 import 'package:xref/canvas_page/canvas_page.dart';
 import 'package:xref/components/push_page.dart';
@@ -12,16 +12,6 @@ import 'thumbnail_card.dart';
 
 class StartPage extends ConsumerWidget {
   const StartPage({super.key});
-
-  void addSaveData(WidgetRef ref) {
-    var newData = SaveData(
-      title: "untitled",
-      id: const Uuid().v7(),
-      boxes: [],
-    );
-
-    ref.read(saveDataRepositoryProvider.notifier).save(newData);
-  }
 
   void deleteData(WidgetRef ref, SaveData saveData) {
     ref.read(saveDataRepositoryProvider.notifier).delete(saveData);
@@ -41,7 +31,16 @@ class StartPage extends ConsumerWidget {
             title: repository[index].title,
             image: const NetworkImage('https://placehold.jp/150x150.png'),
             onTap: () {
-              pushPage(context, CanvasPage(id: repository[index].id));
+              pushPage(
+                context,
+                ProviderScope(
+                  overrides: [
+                    saveDataNotifierProvider.overrideWith(
+                        (ref) => SaveDataNotifier(repository[index]))
+                  ],
+                  child: CanvasPage(id: repository[index].id),
+                ),
+              );
             },
             onDelete: () => ref
                 .read(saveDataRepositoryProvider.notifier)
@@ -60,7 +59,7 @@ class StartPage extends ConsumerWidget {
       drawer: const StartPageDrawer(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () => addSaveData(ref),
+        onPressed: ref.read(saveDataRepositoryProvider.notifier).add,
         child: const Icon(Icons.add),
       ),
     );

@@ -6,10 +6,11 @@ import 'package:xref/application/theme_mode_notifier.dart';
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
-  Widget settingCard(String title, Widget control) {
+  Widget buildTile(String title, Widget control, {String? description}) {
     return Card(
       child: ListTile(
         title: Text(title),
+        subtitle: description?.isNotEmpty ?? false ? Text(description!) : null,
         trailing: control,
       ),
     );
@@ -17,16 +18,16 @@ class SettingsPage extends ConsumerWidget {
 
   List<Widget> buildSettings(WidgetRef ref) {
     final themeMode = ref.watch(themeModeNotifierProvider);
-    final visibleGrid = ref.watch(gridToggleNotifierProvider);
 
     return [
-      settingCard(
+      buildTile(
         "Visible Grid",
         Switch(
-            value: visibleGrid,
-            onChanged: ref.read(gridToggleNotifierProvider.notifier).setValue),
+          value: ref.watch(gridToggleNotifierProvider),
+          onChanged: ref.read(gridToggleNotifierProvider.notifier).setValue,
+        ),
       ),
-      settingCard(
+      buildTile(
         "Theme Mode",
         IconButton(
           onPressed: ref.read(themeModeNotifierProvider.notifier).toggleMode,
@@ -38,6 +39,10 @@ class SettingsPage extends ConsumerWidget {
             };
           }()),
         ),
+      ),
+      buildTile(
+        "Window on the top",
+        Switch(value: false, onChanged: (value) {}),
       )
     ];
   }

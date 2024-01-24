@@ -24,7 +24,7 @@ ThemeData createTheme(Brightness brightness) {
   return ThemeData(
     useMaterial3: true,
     brightness: brightness,
-    colorSchemeSeed: Colors.blueAccent,
+    colorSchemeSeed: Colors.blue,
     fontFamily: GoogleFonts.murecho().fontFamily,
     inputDecorationTheme: InputDecorationTheme(
       isDense: true,

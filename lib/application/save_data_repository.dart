@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:uuid/uuid.dart';
 import 'package:xref/application/save_data.dart';
 
 part 'save_data_repository.g.dart';
@@ -20,6 +21,16 @@ class SaveDataRepository extends _$SaveDataRepository {
     }
 
     state = [...newState, saveData];
+  }
+
+  void add() {
+    var newData = SaveData(
+      title: "untitled",
+      id: const Uuid().v7(),
+      boxes: [],
+    );
+
+    save(newData);
   }
 
   void delete(SaveData saveData) {

@@ -18,7 +18,7 @@ void desktopEnvSetup() {
   }
   doWhenWindowReady(() {
     appWindow.size = const Size(600, 400);
-    appWindow.minSize = const Size(400, 300);
+    appWindow.minSize = const Size(300, 300);
     appWindow.alignment = Alignment.center;
     appWindow.show();
   });

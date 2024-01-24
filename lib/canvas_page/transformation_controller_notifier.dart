@@ -10,11 +10,11 @@ class TransformationControllerNotifier
   @override
   TransformationController build() {
     var controller = TransformationController();
-    controller.value = Matrix4.identity()
-      ..translate(
-        -AppConfig.viewSize.width / 2,
-        -AppConfig.viewSize.height / 2,
-      );
+
+    controller.value.translate(
+      -AppConfig.viewSize.width / 2,
+      -AppConfig.viewSize.height / 2,
+    );
 
     return controller;
   }
