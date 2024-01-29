@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:xref/application/box_data.dart';
+import 'package:xref/canvas_page/box_data.dart';
 
 class SaveData {
   SaveData({
@@ -13,13 +13,13 @@ class SaveData {
   String id;
   String title;
   File? thumbnail;
-  List<BoxData> boxes;
+  List<ImageBoxData> boxes;
 
   SaveData copyWith({
     String? id,
     String? title,
     File? thumbnail,
-    List<BoxData>? boxes,
+    List<ImageBoxData>? boxes,
   }) {
     return SaveData(
       id: id ?? this.id,
@@ -27,5 +27,9 @@ class SaveData {
       thumbnail: thumbnail ?? this.thumbnail,
       boxes: boxes ?? this.boxes,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {"id": id, "title": title};
   }
 }

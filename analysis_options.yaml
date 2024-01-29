@@ -1,7 +1,10 @@
 include: package:flutter_lints/flutter.yaml
 
+
 linter:
   rules:
+    prefer_double_quotes
+
 analyzer:
   errors:
     invalid_annotation_target: ignore

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:image_size_getter/image_size_getter.dart';
-import 'package:xref/application/box_data.dart';
+import 'package:xref/canvas_page/box_data.dart';
 
 class ImageBox extends StatefulWidget {
   const ImageBox({
@@ -12,7 +12,7 @@ class ImageBox extends StatefulWidget {
     required this.boxData,
   });
 
-  final BoxData boxData;
+  final ImageBoxData boxData;
   final bool? isSelect;
   final VoidCallback? onSelect;
   final Function(TransformResult<Rect, Offset, Size> result,

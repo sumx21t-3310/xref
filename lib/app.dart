@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:xref/app_theme.dart';
 import 'package:xref/application/theme_mode_notifier.dart';
 import 'package:xref/start_page/start_page.dart';
+
+import 'generated/l10n.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -12,31 +15,17 @@ class App extends ConsumerWidget {
     final themeMode = ref.watch(themeModeNotifierProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: createTheme(Brightness.light),
-      darkTheme: createTheme(Brightness.dark),
+      theme: Brightness.light.theme,
+      darkTheme: Brightness.dark.theme,
       themeMode: themeMode,
       home: const StartPage(),
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
     );
   }
-}
-
-ThemeData createTheme(Brightness brightness) {
-  return ThemeData(
-    useMaterial3: true,
-    brightness: brightness,
-    colorSchemeSeed: Colors.blue,
-    fontFamily: GoogleFonts.murecho().fontFamily,
-    inputDecorationTheme: InputDecorationTheme(
-      isDense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-      ),
-    ),
-    dialogTheme: DialogTheme(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    ),
-  );
 }

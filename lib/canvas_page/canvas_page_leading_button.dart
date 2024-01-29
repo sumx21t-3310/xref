@@ -21,8 +21,8 @@ class CanvasPageLeadingButton extends StatelessWidget {
       },
       menuChildren: [
         MenuItemButton(
-          child: Text("Close Canvas"),
           onPressed: onCloseCanvas,
+          child: const Text("Close Canvas"),
         ),
         MenuItemButton(
           child: Text("Settings"),
